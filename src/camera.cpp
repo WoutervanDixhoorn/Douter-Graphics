@@ -5,15 +5,15 @@
 
 namespace DG {
 
-	Camera Camera::Create2D(uint32_t windowWidth, uint32_t windowHeight, float worldHeight)
+	Camera Camera::Create2D(uint32_t windowWidth, uint32_t windowHeight, float viewHeight)
 	{
         Camera cam;
 
         cam.m_aspectRatio = (float)windowWidth / (float)windowHeight;
 
-        cam.m_worldHeight = worldHeight;
-        cam.m_worldWidth = worldHeight * cam.m_aspectRatio;
-        cam.m_projectionMatrix = glm::ortho(-cam.m_worldWidth, cam.m_worldWidth, -cam.m_worldHeight, cam.m_worldHeight, -1.0f, 1.0f);
+        cam.m_viewHeight = viewHeight;
+        cam.m_viewWidth = viewHeight * cam.m_aspectRatio;
+        cam.m_projectionMatrix = glm::ortho(-cam.m_viewWidth, cam.m_viewWidth, -cam.m_viewHeight, cam.m_viewHeight, -1.0f, 1.0f);
         cam.m_viewMatrix = glm::mat4(1.0f);
 
         cam.m_cameraMatrix = cam.m_projectionMatrix * cam.m_viewMatrix;
@@ -27,13 +27,13 @@ namespace DG {
         return m_cameraMatrix;
     }
 
-    float Camera::GetHalfWorldHeight()
+    float Camera::GetHalfViewHeight()
     {
-        return m_worldHeight;
+        return m_viewHeight;
     }
 
-    float Camera::GetHalfWorldWidth()
+    float Camera::GetHalfViewWidth()
     {
-        return m_worldWidth;
+        return m_viewWidth;
     }
 }

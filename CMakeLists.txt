@@ -17,20 +17,20 @@ endif()
 add_subdirectory(vendor/glad)
 
 #Recurse the src dir and save the .cpp files inside the MY_SROUCES variable
-file(GLOB_RECURSE MY_SOURCES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/src/*.cpp")
-add_library(${CMAKE_PROJECT_NAME} ${MY_SOURCES})
+file(GLOB_RECURSE DG_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h")
+add_library(douter-graphics STATIC ${DG_SOURCES})
 
-target_link_libraries(${CMAKE_PROJECT_NAME} 
+target_link_libraries(douter-graphics
     PRIVATE glfw 
     PRIVATE glad
 )
 
-target_include_directories(${CMAKE_PROJECT_NAME}
+target_include_directories(douter-graphics
 	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src" 
 	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/vendor/glm"
 )
 
-install(TARGETS ${CMAKE_PROJECT_NAME}
+install(TARGETS douter-graphics
 		ARCHIVE DESTINATION LIB)
 		
 install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/"

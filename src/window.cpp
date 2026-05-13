@@ -1,7 +1,7 @@
 #include "window.h"
 
-#include "GLFW/glfw3.h"
 #include "glad/glad.h"
+#include "GLFW/glfw3.h"
 
 #include <print>
 
@@ -62,5 +62,15 @@ namespace DG {
     void Window::PollAndSwap() {
         glfwSwapBuffers(m_window);
         glfwPollEvents();
+    }
+
+    void Window::UpdateDeltaTime() {
+        double currentTime = glfwGetTime();
+        m_deltaTime = (float)(currentTime - m_lastFrameTime);
+        m_lastFrameTime = currentTime;
+    }
+
+    float Window::GetDeltaTime() {
+        return m_deltaTime;
     }
 }

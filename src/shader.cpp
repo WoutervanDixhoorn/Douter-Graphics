@@ -70,6 +70,7 @@ namespace DG {
 
 	void Shader::SetMat4(const char* uniformName, glm::mat4 matrix)
 	{
+        Bind();
         unsigned int uniLoc = glGetUniformLocation(m_shaderId, uniformName);
         glUniformMatrix4fv(uniLoc, 1, GL_FALSE, glm::value_ptr(matrix));
 	}
