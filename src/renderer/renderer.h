@@ -5,8 +5,10 @@ namespace DG {
 	class Renderer {
 	public:
 		static void Clear(float r, float g, float b, float a);
-	private:
 
+		static void BeginImGui();
+		static void EndImGui();
+	private:
 	};
 
 }

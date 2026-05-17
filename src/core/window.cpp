@@ -3,6 +3,10 @@
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
+
 #include <print>
 
 namespace DG {
@@ -15,12 +19,21 @@ namespace DG {
 	Window::Window(int width, int height, const char* title) 
 		: m_width(width), m_height(height), m_title(title) 
 	{
-		(void)initializeWindow();
+        if (!initializeWindow()) {
+            std::println(stderr, "Failed initializing window!");
+            return;
+        }
+
+        (void)initializeImGui();
 	}
 
     Window::~Window() {
         glfwDestroyWindow(m_window);
         glfwTerminate();
+
+        ImGui_ImplOpenGL3_Shutdown();
+        ImGui_ImplGlfw_Shutdown();
+        ImGui::DestroyContext();
     }
 
     bool Window::initializeWindow() {
@@ -54,6 +67,21 @@ namespace DG {
 
         return true;
 	}
+
+    bool Window::initializeImGui()
+    {
+        IMGUI_CHECKVERSION();
+        (void)ImGui::CreateContext();
+        ImGuiIO& io = ImGui::GetIO();
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+
+        ImGui_ImplOpenGL3_Init();
+        ImGui_ImplGlfw_InitForOpenGL(m_window, true);
+        
+        return true;
+    }
 
     bool Window::ShouldClose() {
         return glfwWindowShouldClose(m_window);

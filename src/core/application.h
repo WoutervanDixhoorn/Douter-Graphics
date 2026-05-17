@@ -19,7 +19,7 @@ namespace DG {
 		void Run();
 
 	protected:
-		void PushLayer(Layer& layer);
+		void PushLayer(std::unique_ptr<Layer> layer);
 		void PopLayer();
 
 	private:

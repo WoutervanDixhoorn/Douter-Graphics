@@ -17,6 +17,7 @@ namespace DG {
 
 	private:
 		bool initializeWindow();
+		bool initializeImGui();
 
 		int m_width, m_height;
 		const char* m_title;

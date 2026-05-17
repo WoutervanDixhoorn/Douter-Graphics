@@ -7,22 +7,23 @@ namespace DG {
 		m_layers.reserve(4);
 	}
 
-	void LayerStack::PushLayer(Layer& layer) {
-		m_layers.push_back(&layer);
-		layer.OnAttach();
+	void LayerStack::PushLayer(std::unique_ptr<Layer> layer) {
+		layer->OnAttach();
+		m_layers.push_back(std::move(layer));
 	}
 
 	void LayerStack::PopLayer() {
-		Layer* layer = m_layers.back();
-		layer->OnDettach();
-		m_layers.pop_back();		
+		if (m_layers.empty()) return;
+
+		m_layers.back()->OnDettach();
+		m_layers.pop_back();
 	}
 
-	iterator LayerStack::begin() {
+	LayerStack::iterator LayerStack::begin() {
 		return m_layers.begin();
 	}
 
-	iterator LayerStack::end() {
+	LayerStack::iterator LayerStack::end() {
 		return m_layers.end();
 	}
 }

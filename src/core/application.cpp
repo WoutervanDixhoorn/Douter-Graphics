@@ -1,5 +1,7 @@
 #include "application.h"
 
+#include "renderer/renderer.h"
+
 namespace DG {
 
 	Application::Application(const ApplicationSettings& settings)
@@ -28,13 +30,19 @@ namespace DG {
 	}
 
 	void Application::Update(float deltaTime) {
-		for (Layer* l : m_layerStack) {
+		for (auto& l : m_layerStack) {
 			l->OnUpdate(deltaTime);
 		}
+
+		DG::Renderer::BeginImGui();
+		for (auto& l : m_layerStack) {
+			l->OnGuiDraw();
+		}
+		DG::Renderer::EndImGui();
 	}
 
-	void Application::PushLayer(Layer& layer) {
-		m_layerStack.PushLayer(layer);
+	void Application::PushLayer(std::unique_ptr<Layer> layer) {
+		m_layerStack.PushLayer(std::move(layer));
 	}
 
 	void Application::PopLayer() {

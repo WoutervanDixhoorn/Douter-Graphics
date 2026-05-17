@@ -14,7 +14,7 @@ else()
 	add_subdirectory(vendor/glfw)
 endif()
 
-add_subdirectory(vendor/glad)
+add_subdirectory(vendor)
 
 #Recurse the src dir and save the .cpp files inside the MY_SROUCES variable
 file(GLOB_RECURSE DG_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h")
@@ -23,6 +23,7 @@ add_library(douter-graphics STATIC ${DG_SOURCES})
 target_link_libraries(douter-graphics
     PRIVATE glfw 
     PRIVATE glad
+	PUBLIC imgui
 )
 
 target_include_directories(douter-graphics
