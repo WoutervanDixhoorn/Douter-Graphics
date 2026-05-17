@@ -3,7 +3,7 @@
 #include <print>
 #include <fstream>
 #include <sstream>
-#include "glad/glad.h"
+#include "renderer/graphics_api.h"
 
 #include "glm/gtc/type_ptr.hpp"
 
@@ -42,6 +42,10 @@ namespace DG {
         std::string sourceLine;
         while(std::getline(shaderFile, sourceLine))
         {   
+            if (sourceLine.ends_with('\r')) {
+                sourceLine.pop_back();
+            }
+
             if (sourceLine.find("#vertex") != std::string::npos) {
                 readMode = 0;
                 continue;

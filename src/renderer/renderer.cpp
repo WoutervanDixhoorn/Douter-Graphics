@@ -1,6 +1,6 @@
 #include "renderer.h"
 
-#include "glad/glad.h"
+#include "renderer/graphics_api.h"
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"

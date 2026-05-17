@@ -1,6 +1,7 @@
 #include "window.h"
 
-#include "glad/glad.h"
+#include "renderer/graphics_api.h"
+
 #include "GLFW/glfw3.h"
 
 #include "imgui.h"
@@ -43,10 +44,13 @@ namespace DG {
             return false;
         }
 
+#ifdef __EMSCRIPTEN__
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_ES_API);
+#else
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
-
+#endif
         m_window = glfwCreateWindow(m_width, m_height, m_title, NULL, NULL);
         if (m_window == NULL) {
             std::println(stderr, "glfwCreateWindow() failed!");
@@ -56,10 +60,12 @@ namespace DG {
 
         glfwMakeContextCurrent(m_window);
 
+#ifndef __EMSCRIPTEN__
         if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
             std::println(stderr, "Failed to initialize GLAD");
             return false;
         }
+#endif
         std::println("GL_VERSION: {}", (const char*)glGetString(GL_VERSION));
 
         glViewport(0, 0, m_width, m_height);

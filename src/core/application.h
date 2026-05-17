@@ -2,7 +2,7 @@
 
 #include "window.h"
 #include "layerStack.h"
-#include "Renderer/camera.h"
+#include "renderer/camera.h"
 
 namespace DG {
 
@@ -17,6 +17,7 @@ namespace DG {
 		Application(const ApplicationSettings& settings);
 
 		void Run();
+		bool IsRunning();
 
 	protected:
 		void PushLayer(std::unique_ptr<Layer> layer);
@@ -24,6 +25,7 @@ namespace DG {
 
 	private:
 		void Update(float deltaTime);
+		void Tick();
 
 	private:
 		ApplicationSettings m_applicationSettings;

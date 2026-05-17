@@ -2,6 +2,10 @@
 
 #include "renderer/renderer.h"
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
+
 namespace DG {
 
 	Application::Application(const ApplicationSettings& settings)
@@ -17,16 +21,20 @@ namespace DG {
 	void Application::Run() {
 		m_running = true;
 
+#ifdef __EMSCRIPTEN__
+		emscripten_set_main_loop_arg([](void* userData) {
+			Application* app = static_cast<Application*>(userData);
+			app->Tick();
+		}, this, 0, 1);
+#else
 		while (m_running) {
-			m_window->UpdateDeltaTime();
-
-			Update(m_window->GetDeltaTime());
-
-			m_window->PollAndSwap();
-			if (m_window->ShouldClose()) {
-				m_running = false;
-			}
+			Tick();
 		}
+#endif
+	}
+
+	bool Application::IsRunning() {
+		return m_running;
 	}
 
 	void Application::Update(float deltaTime) {
@@ -39,6 +47,17 @@ namespace DG {
 			l->OnGuiDraw();
 		}
 		DG::Renderer::EndImGui();
+	}
+
+	void Application::Tick() {
+		m_window->UpdateDeltaTime();
+
+		Update(m_window->GetDeltaTime());
+
+		m_window->PollAndSwap();
+		if (m_window->ShouldClose()) {
+			m_running = false;
+		}
 	}
 
 	void Application::PushLayer(std::unique_ptr<Layer> layer) {

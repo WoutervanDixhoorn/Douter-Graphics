@@ -1,6 +1,6 @@
 #include "vertexLayout.h"
 
-#include "glad/glad.h"
+#include "renderer/graphics_api.h"
 
 namespace DG {
 	
