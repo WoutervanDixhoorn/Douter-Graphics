@@ -25,6 +25,30 @@ namespace DG {
         glDeleteShader(fs);
 	}
 
+    Shader::~Shader() {
+        if (m_shaderId != 0) {
+            glDeleteProgram(m_shaderId);
+        }
+    }
+
+    Shader::Shader(Shader&& other) noexcept {
+        m_shaderId = other.m_shaderId;
+        other.m_shaderId = 0;
+    }
+
+    Shader& Shader::operator=(Shader&& other) noexcept {
+        if (this != &other) {
+            if (m_shaderId != 0) {
+                glDeleteProgram(m_shaderId);
+            }
+
+            m_shaderId = other.m_shaderId;
+            other.m_shaderId = 0;
+        }
+
+        return *this;
+    }
+
     Shader Shader::LoadFromFile(const char* filePath)
     {
         std::fstream shaderFile;
@@ -42,10 +66,6 @@ namespace DG {
         std::string sourceLine;
         while(std::getline(shaderFile, sourceLine))
         {   
-            if (sourceLine.ends_with('\r')) {
-                sourceLine.pop_back();
-            }
-
             if (sourceLine.find("#vertex") != std::string::npos) {
                 readMode = 0;
                 continue;

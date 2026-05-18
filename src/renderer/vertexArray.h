@@ -8,6 +8,7 @@ namespace DG {
 	class VertexArray {
 	public:
 		VertexArray(VertexBuffer& vertexBuffer, IndexBuffer& indexBuffer, const VertexLayout& layout);
+		VertexArray(VertexBuffer& vertexBuffer, const VertexLayout& layout);
 
 		~VertexArray();
 		VertexArray(const VertexArray&) = delete;
@@ -16,6 +17,7 @@ namespace DG {
 		VertexArray& operator=(VertexArray&& other) noexcept;
 
 		void Bind();
+		void Unbind();
 	private:
 		unsigned int m_bufferId;
 	};

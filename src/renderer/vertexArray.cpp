@@ -8,10 +8,23 @@ namespace DG {
 	{	
 		glGenVertexArrays(1, &m_bufferId);
 		Bind();
-		
+	
 		vertexBuffer.Bind();
 		indexBuffer.Bind();
 		vertexLayout.Apply();
+
+		Unbind();
+	}
+
+	VertexArray::VertexArray(VertexBuffer& vertexBuffer, const VertexLayout& vertexLayout)
+	{
+		glGenVertexArrays(1, &m_bufferId);
+		Bind();
+
+		vertexBuffer.Bind();
+		vertexLayout.Apply();
+
+		Unbind();
 	}
 	
 	VertexArray::~VertexArray() {
@@ -37,8 +50,11 @@ namespace DG {
 		return *this;
 	}
 
-	void VertexArray::Bind()
-	{
+	void VertexArray::Bind() {
 		glBindVertexArray(m_bufferId);
+	}
+
+	void VertexArray::Unbind() {
+		glBindVertexArray(0);
 	}
 }

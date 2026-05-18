@@ -42,11 +42,11 @@ namespace DG {
 			l->OnUpdate(deltaTime);
 		}
 
-		DG::Renderer::BeginImGui();
+		DG::Renderer2D::BeginImGui();
 		for (auto& l : m_layerStack) {
 			l->OnGuiDraw();
 		}
-		DG::Renderer::EndImGui();
+		DG::Renderer2D::EndImGui();
 	}
 
 	void Application::Tick() {

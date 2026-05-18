@@ -38,9 +38,14 @@ namespace DG {
 	}
 
 	void VertexBuffer::SetData(void* vertexData, int vertexCount, size_t vertexSize) {
+		Bind();
 		glBufferData(GL_ARRAY_BUFFER, vertexCount * vertexSize, vertexData, GL_STATIC_DRAW);
 	}
 
+	void VertexBuffer::UpdateData(void* vertexData, int vertexCount, size_t vertexSize) {
+		Bind();
+		glBufferSubData(GL_ARRAY_BUFFER, 0, vertexCount * vertexSize, vertexData);
+	}
 
 	IndexBuffer::IndexBuffer() {
 		glGenBuffers(1, &m_bufferId);

@@ -10,8 +10,8 @@ namespace DG {
 
 		glm::mat4 GetCameraMatrix();
 	
-		float GetHalfViewHeight();
-		float GetHalfViewWidth();
+		float GetViewHeight();
+		float GetViewWidth();
 	private:
 		float m_aspectRatio;
 		float m_viewHeight, m_viewWidth;

@@ -32,6 +32,16 @@ target_include_directories(douter-graphics
 	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/vendor/glm"
 )
 
+#Custom Targets
+add_custom_target(CopyDGAssets
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_CURRENT_SOURCE_DIR}/assets"
+        "${CMAKE_BINARY_DIR}/assets/douter"
+)
+if(NOT EMSCRIPTEN)
+add_dependencies(douter-graphics CopyDGAssets)
+endif()
+
 install(TARGETS douter-graphics
 		ARCHIVE DESTINATION LIB)
 		

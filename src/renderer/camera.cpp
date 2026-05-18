@@ -13,7 +13,7 @@ namespace DG {
 
         cam.m_viewHeight = viewHeight;
         cam.m_viewWidth = viewHeight * cam.m_aspectRatio;
-        cam.m_projectionMatrix = glm::ortho(-cam.m_viewWidth, cam.m_viewWidth, -cam.m_viewHeight, cam.m_viewHeight, -1.0f, 1.0f);
+        cam.m_projectionMatrix = glm::ortho(0.0f, cam.m_viewWidth, cam.m_viewHeight, 0.0f, -1.0f, 1.0f);
         cam.m_viewMatrix = glm::mat4(1.0f);
 
         cam.m_cameraMatrix = cam.m_projectionMatrix * cam.m_viewMatrix;
@@ -27,12 +27,12 @@ namespace DG {
         return m_cameraMatrix;
     }
 
-    float Camera::GetHalfViewHeight()
+    float Camera::GetViewHeight()
     {
         return m_viewHeight;
     }
 
-    float Camera::GetHalfViewWidth()
+    float Camera::GetViewWidth()
     {
         return m_viewWidth;
     }

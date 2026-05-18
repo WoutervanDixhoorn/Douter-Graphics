@@ -19,6 +19,7 @@ namespace DG {
 		void Bind();
 
 		void SetData(void* vertexData, int vertexCount, size_t vertexSize);
+		void UpdateData(void* vertexData, int vertexCount, size_t vertexSize);
 	private:
 		unsigned int m_bufferId;
 	};
