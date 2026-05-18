@@ -36,7 +36,7 @@ namespace DG {
 
 		void Bind();
 
-		void SetData(uint32_t* indexData, int indexCount);
+		void SetData(const uint32_t* indexData, int indexCount);
 	private:
 		unsigned int m_bufferId;
 	};

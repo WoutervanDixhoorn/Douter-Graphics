@@ -21,6 +21,13 @@ namespace DG {
 		}
 	}
 
+	VertexLayout VertexLayout::GetDefaultMeshLayout() {
+		VertexLayout layout;
+		layout.AddAttribute(AttribType::FLOAT_ATTRIB, 2);
+
+		return layout;
+	}
+
 	int VertexLayout::attribTypeToOpenGlType(AttribType type) const
 	{
 		switch (type) {

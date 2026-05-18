@@ -2,21 +2,17 @@
 
 #include <cstddef>
 #include <optional>
+#include <vector>
 
+#include "rendererTypes.h"
 #include "vertexArray.h"
 #include "buffers.h"
 
 namespace DG {
 
 	struct MeshData {
-		void* vertexData = nullptr;
-		size_t vertexSize = 0;
-		size_t vertexCount = 0;
-
-		uint32_t* indexData = nullptr;
-		size_t indexCount = 0;
-
-		VertexLayout vertexLayout;
+		std::vector<Vertex> Vertices;
+		std::vector<uint32_t> Indices;
 	};
 
 	class Mesh {
@@ -26,7 +22,7 @@ namespace DG {
 	public:
 		static std::optional<Mesh> Create(const MeshData& data);
 
-		void Draw();
+		void Bind();
 
 	private:
 		std::optional<DG::VertexBuffer> m_vertexBuffer;

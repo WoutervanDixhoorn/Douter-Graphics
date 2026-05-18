@@ -6,7 +6,6 @@ namespace DG {
 
 	VertexBuffer::VertexBuffer() {
 		glGenBuffers(1, &m_bufferId);
-		Bind();
 	}
 
 	VertexBuffer::~VertexBuffer() {
@@ -49,7 +48,6 @@ namespace DG {
 
 	IndexBuffer::IndexBuffer() {
 		glGenBuffers(1, &m_bufferId);
-		Bind();
 	}
 
 	IndexBuffer::~IndexBuffer() {
@@ -80,7 +78,8 @@ namespace DG {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_bufferId);
 	}
 
-	void IndexBuffer::SetData(uint32_t* indexData, int indexCount) {
+	void IndexBuffer::SetData(const uint32_t* indexData, int indexCount) {
+		Bind();
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount * sizeof(uint32_t), indexData, GL_STATIC_DRAW);
 	}
 }

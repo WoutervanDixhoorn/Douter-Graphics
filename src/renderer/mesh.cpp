@@ -12,17 +12,17 @@ namespace DG {
 		std::println(stdout, "Creating a Mesh..");
 
 		m_vertexBuffer.emplace();
-		m_vertexBuffer.value().SetData(data.vertexData, data.vertexCount, data.vertexSize);
+		m_vertexBuffer.value().SetData((void*)data.Vertices.data(), data.Vertices.size(), sizeof(Vertex));
 
 		m_indexBuffer.emplace();
-		m_indexBuffer.value().SetData(data.indexData, data.indexCount);
+		m_indexBuffer.value().SetData(data.Indices.data(), data.Indices.size());
 
-		m_vertexArray.emplace(m_vertexBuffer.value(), m_indexBuffer.value(), data.vertexLayout);
+		m_vertexArray.emplace(m_vertexBuffer.value(), m_indexBuffer.value(), VertexLayout::GetDefaultMeshLayout());
 	}
 
 	std::optional<Mesh> Mesh::Create(const MeshData& data)
 	{
-		if (data.vertexCount <= 0 || data.vertexData == nullptr) {
+		if (data.Vertices.size() <= 0) {
 			std::println(stderr, "Creating a Mesh failed, MeshData needs to be filled with data...");
 			return std::nullopt;
 		}
@@ -30,10 +30,8 @@ namespace DG {
 		return Mesh(data);
 	}
 
-	void Mesh::Draw()
-	{
+	void Mesh::Bind() {
 		m_vertexArray.value().Bind();
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
 	}
 
 }
