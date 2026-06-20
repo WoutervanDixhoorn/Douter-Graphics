@@ -6,8 +6,6 @@
 #include "entity.h"
 
 namespace DG {
-
-	const Entity NULL_ENTITY = 0xFFFFFFFF;
 	
 	class ISparseSet {
 	public:
