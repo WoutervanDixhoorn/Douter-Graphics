@@ -1,6 +1,7 @@
 #include "application.h"
 
 #include "renderer/renderer.h"
+#include "core/time.h"
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
@@ -50,9 +51,9 @@ namespace DG {
 	}
 
 	void Application::Tick() {
-		m_window->UpdateDeltaTime();
+		Time::Update();
 
-		Update(m_window->GetDeltaTime());
+		Update(Time::GetDeltaTime());
 
 		m_window->PollAndSwap();
 		if (m_window->ShouldClose()) {
