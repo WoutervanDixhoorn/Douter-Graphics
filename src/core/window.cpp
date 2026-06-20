@@ -97,14 +97,4 @@ namespace DG {
         glfwSwapBuffers(m_window);
         glfwPollEvents();
     }
-
-    void Window::UpdateDeltaTime() {
-        double currentTime = glfwGetTime();
-        m_deltaTime = (float)(currentTime - m_lastFrameTime);
-        m_lastFrameTime = currentTime;
-    }
-
-    float Window::GetDeltaTime() {
-        return m_deltaTime;
-    }
 }
