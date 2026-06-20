@@ -21,8 +21,6 @@ namespace DG {
 
 		static void DrawMesh(Mesh* mesh, glm::mat4 transform);
 
-		static void DrawLine(glm::vec2 startPos, glm::vec2 endPos);
-
 		static void BeginScene(DG::Camera& camera);
 		static void EndScene();
 
@@ -30,17 +28,10 @@ namespace DG {
 		static void EndImGui();
 
 	private:
-		static void intializeLineRenderer();
 		static void initializeMeshRenderer();
 
 	private:
 		struct Renderer2DData {
-			std::vector<glm::vec2> lineVertices;
-			std::unique_ptr<Shader> lineShader;
-			std::unique_ptr<VertexArray> lineVAO;
-			std::unique_ptr<VertexBuffer> lineVBO;
-			const size_t MAX_LINES = 2000;
-
 			std::unique_ptr<Shader> meshShader;
 
 			Camera* camera;

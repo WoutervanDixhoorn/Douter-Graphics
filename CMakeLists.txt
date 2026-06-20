@@ -33,6 +33,12 @@ target_include_directories(douter-graphics
 )
 
 #Custom Targets
+if (EMSCRIPTEN)
+    target_link_libraries(douter-graphics INTERFACE 
+        "--preload-file=${CMAKE_CURRENT_SOURCE_DIR}/assets@assets/douter"
+    )
+endif()
+
 add_custom_target(CopyDGAssets
     COMMAND ${CMAKE_COMMAND} -E copy_directory
         "${CMAKE_CURRENT_SOURCE_DIR}/assets"

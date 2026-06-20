@@ -82,4 +82,9 @@ namespace DG {
 		Bind();
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount * sizeof(uint32_t), indexData, GL_STATIC_DRAW);
 	}
+
+	void IndexBuffer::UpdateData(const uint32_t* indexData, int indexCount) {
+		Bind();
+		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, indexCount * sizeof(uint32_t), indexData);
+	}
 }
