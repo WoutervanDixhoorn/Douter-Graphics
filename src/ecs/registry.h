@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "entity.h"
+#include "componentTypeManager.h"
 #include "sparseSet.h"
 
 namespace DG {
