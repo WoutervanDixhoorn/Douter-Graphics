@@ -2,6 +2,7 @@
 
 #include "glm/glm.hpp"
 #include "renderer/mesh.h"
+#include "renderer/renderer.h"
 
 namespace DG {
 	
@@ -19,5 +20,12 @@ namespace DG {
 
 	struct MeshRenderComponent {
 		DG::Mesh* mesh = nullptr;
+
+		void Draw(glm::mat4 transform)
+		{
+			if (mesh == nullptr) return;
+
+			DG::Renderer2D::DrawMesh(mesh, transform);
+		}
 	};
 }
