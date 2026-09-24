@@ -1,5 +1,4 @@
 #vertex
-#version 300 es
 
 layout(location = 0) in vec2 worldPosition;
 layout(location = 1) in vec2 localPosition;
@@ -19,7 +18,7 @@ void main()
 }
 
 #fragment
-#version 300 es
+
 precision mediump float;
 
 in vec2 v_localPos;

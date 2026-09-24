@@ -80,11 +80,23 @@ namespace DG {
 
         shaderFile.close();
 
-        std::println(stdout, "Loaded shaders....\n");
-        std::println(stdout, "Vertex:\n{}", shaderSource[0].str());
-        std::println(stdout, "Fragment:\n{}", shaderSource[1].str());
+	    std::string shaderHeader =
+#ifdef __EMSCRIPTEN__
+	    "#version 300 es\n";
+#elif __APPLE__
+        "#version 410 core\n";
+#else
+        "#version 460\n"
+#endif
 
-        return Shader(shaderSource[0].str(), shaderSource[1].str());
+	    std::string vertexSource = shaderHeader + shaderSource[0].str();
+	    std::string fragmentSource = shaderHeader + shaderSource[1].str();
+
+        std::println(stdout, "Loaded shaders....\n");
+        std::println(stdout, "Vertex:\n{}", vertexSource);
+        std::println(stdout, "Fragment:\n{}", fragmentSource);
+
+        return Shader(vertexSource, fragmentSource);
     }
 
 	void Shader::Bind()

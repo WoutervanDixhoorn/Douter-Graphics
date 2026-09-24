@@ -21,8 +21,7 @@ namespace DG {
 	struct MeshRenderComponent {
 		DG::Mesh* mesh = nullptr;
 
-		void Draw(glm::mat4 transform)
-		{
+		void Draw(const glm::mat4& transform) const {
 			if (mesh == nullptr) return;
 
 			DG::Renderer2D::DrawMesh(mesh, transform);
