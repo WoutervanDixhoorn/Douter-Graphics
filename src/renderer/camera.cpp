@@ -5,11 +5,11 @@
 
 namespace DG {
 
-	Camera Camera::Create2D(uint32_t windowWidth, uint32_t windowHeight, float viewHeight)
+	Camera Camera::Create2D(const uint32_t windowWidth, const uint32_t windowHeight, const float viewHeight)
 	{
         Camera cam;
 
-        cam.m_aspectRatio = (float)windowWidth / (float)windowHeight;
+        cam.m_aspectRatio = static_cast<float>(windowWidth) / static_cast<float>(windowHeight);
 
         cam.m_viewHeight = viewHeight;
         cam.m_viewWidth = viewHeight * cam.m_aspectRatio;

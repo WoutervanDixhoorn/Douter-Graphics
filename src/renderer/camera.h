@@ -13,8 +13,8 @@ namespace DG {
 		float GetViewHeight();
 		float GetViewWidth();
 	private:
-		float m_aspectRatio;
-		float m_viewHeight, m_viewWidth;
+		float m_aspectRatio = 0;
+		float m_viewHeight = 0, m_viewWidth = 0;
 		glm::mat4 m_cameraMatrix;
 		glm::mat4 m_projectionMatrix;
 		glm::mat4 m_viewMatrix;

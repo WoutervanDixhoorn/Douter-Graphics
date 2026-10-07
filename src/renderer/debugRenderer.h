@@ -44,13 +44,13 @@ namespace DG {
 
 			std::vector<CircleVertex> circleVertices;
 			std::vector<uint32_t> circleIndices;
-			size_t MAX_CIRCLES = 2000;
+			size_t MAX_CIRCLES = 20000;
 
 			std::vector<glm::vec2> lineVertices;
 			std::unique_ptr<Shader> lineShader;
 			std::unique_ptr<VertexArray> lineVAO;
 			std::unique_ptr<VertexBuffer> lineVBO;
-			const size_t MAX_LINES = 4000;
+			const size_t MAX_LINES = 40000;
 
 			Camera* camera;
 		};

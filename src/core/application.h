@@ -7,8 +7,8 @@
 namespace DG {
 
 	struct ApplicationSettings {
-		float windowWidth = 1280;
-		float windowHeight = 720;
+		uint32_t windowWidth = 1280;
+		uint32_t windowHeight = 720;
 		const char* windowTitle = "DG Application";
 	};
 

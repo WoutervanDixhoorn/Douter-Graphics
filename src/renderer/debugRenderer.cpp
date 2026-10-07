@@ -5,6 +5,8 @@
 #include "graphics_api.h"
 #include "vertexLayout.h"
 
+//TODO: Make the renderer limits/settings actually variable so that they are tweakable if we want
+
 namespace DG {
 
 	DebugRenderer::RendererData* DebugRenderer::s_data = nullptr;
@@ -96,6 +98,11 @@ namespace DG {
 	}
 
 	void DebugRenderer::DrawCircle(glm::vec2 center, float radius) {
+		if (s_data->circleVertices.size() >= s_data->MAX_CIRCLES * 4) {
+			std::println(stderr, "DebugRenderer::DrawCircle, cannot draw more circles than MAX_CIRCLES!");
+			return;
+		}
+
 		glm::vec2 offsetX(radius, 0.0f);
 		glm::vec2 offsetY(0.0f, radius);
 
