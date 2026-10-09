@@ -127,7 +127,7 @@ namespace DG {
             std::vector<char> message(length);
             glGetShaderInfoLog(id, length, &length, message.data());
             std::println(stderr, "Shader failed compiling!");
-            std::println(stderr, "{}", message);
+            std::println(stderr, "{}", message.data());
 
             glDeleteShader(id);
         }

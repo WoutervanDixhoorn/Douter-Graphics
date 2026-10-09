@@ -22,7 +22,7 @@ namespace DG {
 
 	void Grid::DrawDebugLines() {
 		for (float x = 0; x < m_worldWidth; x += m_cellWidth) {
-			DG::DebugRenderer::DrawLine({ x, 0.0f }, {x, m_worldHeight});
+			DG::DebugRenderer::DrawLine({ x, 0.0f}, {x, m_worldHeight});
 		}
 
 		for (float y = 0; y < m_worldHeight; y += m_cellHeight) {

@@ -17,8 +17,14 @@ namespace DG {
 	public:
 		static void Init();
 
-		static void DrawCircle(glm::vec2 center, float radius);
+		static void DrawCircle(glm::vec3 center, float radius, glm::vec4 color, float fillLevel);
+		static void DrawCircle(glm::vec2 center, float radius, float fillLevel);
+		static void DrawCircle(glm::vec2 center, float radius, glm::vec4 color);
+		static void DrawFilledCircle(glm::vec2 center, float radius, glm::vec4 color);
+
+		static void DrawLine(glm::vec3 startPos, glm::vec3 endPos, glm::vec4 color);
 		static void DrawLine(glm::vec2 startPos, glm::vec2 endPos);
+		static void DrawLine(glm::vec2 startPos, glm::vec2 endPos, glm::vec4 color);
 
 		static void Begin(Camera& camera);
 		static void End();
@@ -31,9 +37,16 @@ namespace DG {
 		static void flushLineRenderer();
 
 	private:
-		struct CircleVertex {
-			glm::vec2 worldPos, localPos;
+		struct LineVertex {
+			glm::vec3 pos;
 			glm::vec4 color;
+		};
+
+		struct CircleVertex {
+			glm::vec3 worldPos;
+			glm::vec2 localPos;
+			glm::vec4 color;
+			float fillLevel;
 		};
 
 		struct RendererData {
@@ -46,7 +59,7 @@ namespace DG {
 			std::vector<uint32_t> circleIndices;
 			size_t MAX_CIRCLES = 20000;
 
-			std::vector<glm::vec2> lineVertices;
+			std::vector<LineVertex> lineVertices;
 			std::unique_ptr<Shader> lineShader;
 			std::unique_ptr<VertexArray> lineVAO;
 			std::unique_ptr<VertexBuffer> lineVBO;
