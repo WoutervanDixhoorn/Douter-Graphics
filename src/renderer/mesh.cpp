@@ -7,8 +7,7 @@
 
 namespace DG {
 
-	Mesh::Mesh(const MeshData& data)
-	{
+	Mesh::Mesh(const MeshData& data) {
 		std::println(stdout, "Creating a Mesh..");
 
 		m_vertexBuffer.emplace();
@@ -20,8 +19,7 @@ namespace DG {
 		m_vertexArray.emplace(m_vertexBuffer.value(), m_indexBuffer.value(), VertexLayout::GetDefaultMeshLayout());
 	}
 
-	std::optional<Mesh> Mesh::Create(const MeshData& data)
-	{
+	std::optional<Mesh> Mesh::Create(const MeshData& data) {
 		if (data.Vertices.size() <= 0) {
 			std::println(stderr, "Creating a Mesh failed, MeshData needs to be filled with data...");
 			return std::nullopt;
