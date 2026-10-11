@@ -59,7 +59,8 @@ namespace DG {
 	}
 
 	void Camera::SetPosition(const glm::vec3 position) {
-		m_viewMatrix = glm::translate(glm::mat4(1.0f), -position);
+		m_position = position;
+		m_viewMatrix = glm::translate(glm::mat4(1.0f), -m_position);
 		recalculateViewMatrix();
 	}
 
@@ -93,6 +94,9 @@ namespace DG {
         return m_viewWidth;
     }
 
+	glm::vec3 Camera::GetPosition() const {
+		return m_position;
+	}
 
 	void Camera::recalculateViewMatrix() {
 		m_cameraMatrix = m_projectionMatrix * m_viewMatrix;

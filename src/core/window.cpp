@@ -1,6 +1,7 @@
 #include "window.h"
 
-#include "renderer/graphics_api.h"
+#include "renderer/openglGraphicsContext.h"
+#include "application.h"
 
 #include "GLFW/glfw3.h"
 
@@ -12,19 +13,18 @@
 
 namespace DG {
 
-    void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-    {
-        glViewport(0, 0, width, height);
-    }
-
 	Window::Window(int width, int height, const char* title) 
-		: m_width(width), m_height(height), m_title(title) 
+		: m_width(width), m_height(height), m_title(title)
 	{
-        if (!initializeWindow()) {
+	    if (!initializeWindow()) {
             std::println(stderr, "Failed initializing window!");
             return;
         }
 
+	    m_context = std::make_unique<OpenGLGraphicsContext>(m_window);
+        m_context->Initialize();
+
+	    (void)initializeCallbacks();
         (void)initializeImGui();
 	}
 
@@ -37,6 +37,10 @@ namespace DG {
         ImGui::DestroyContext();
     }
 
+    void Window::SetEventCallback(std::function<void(IEvent&)> callback) {
+        m_data.eventCallback = callback;
+    }
+
     bool Window::initializeWindow() {
         if (glfwInit() == GLFW_FALSE) {
             std::println(stderr, "glfwInit() failed!");
@@ -44,20 +48,8 @@ namespace DG {
             return false;
         }
 
-#ifdef __EMSCRIPTEN__
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_ES_API);
-#elif __APPLE__
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#else
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
-#endif
+	    OpenGLGraphicsContext::PreWindowCreationHints();
+
         m_window = glfwCreateWindow(m_width, m_height, m_title, NULL, NULL);
         if (m_window == NULL) {
             std::println(stderr, "glfwCreateWindow() failed!");
@@ -65,20 +57,82 @@ namespace DG {
             return false;
         }
 
-        glfwMakeContextCurrent(m_window);
-
-#ifndef __EMSCRIPTEN__
-        if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-            std::println(stderr, "Failed to initialize GLAD");
-            return false;
-        }
-#endif
-        std::println("GL_VERSION: {}", (const char*)glGetString(GL_VERSION));
-
-        glViewport(0, 0, m_width, m_height);
-        glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
+        glfwSetWindowUserPointer(m_window, &m_data);
 
         return true;
+	}
+
+    bool Window::initializeCallbacks() {
+        glfwSetKeyCallback(m_window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
+            auto&[eventCallback] = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+
+            if (action == GLFW_PRESS) {
+                KeyPressedEvent keyEvent(key);
+                eventCallback(keyEvent);
+            } else if (action == GLFW_RELEASE) {
+                KeyReleasedEvent keyEvent(key);
+                eventCallback(keyEvent);
+            }
+        });
+
+        glfwSetCursorPosCallback(m_window, [](GLFWwindow* window, double x, double y) {
+            auto&[eventCallback] = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+
+            MouseMovedEvent mouseMovedEvent(x, y);
+            eventCallback(mouseMovedEvent);
+        });
+
+	    glfwSetMouseButtonCallback(m_window, [](GLFWwindow* window, int button, int action, int mods) {
+	        auto&[eventCallback] = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+
+	        if (action == GLFW_PRESS) {
+	            MousePressedEvent pressedEvent(button);
+	            eventCallback(pressedEvent);
+	        } else if (action == GLFW_RELEASE) {
+	            MouseReleasedEvent releasedEvent(button);
+	            eventCallback(releasedEvent);
+	        }
+	    });
+
+	    glfwSetFramebufferSizeCallback(m_window, [](GLFWwindow* window, int width, int height) {
+            auto&[eventCallback] = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+
+            WindowResizeEvent resizeEvent(width, height);
+            eventCallback(resizeEvent);
+        });
+
+	    glfwSetWindowCloseCallback(m_window, [](GLFWwindow* window) {
+	        auto&[eventCallback] = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+
+	        WindowCloseEvent closeEvent;
+	        eventCallback(closeEvent);
+	    });
+
+	    glfwSetWindowIconifyCallback(m_window, [](GLFWwindow* window, int iconified) {
+	        auto&[eventCallback] = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+
+	    	if (iconified) {
+				WindowMinimizeEvent minimizeEvent(true);
+	    		eventCallback(minimizeEvent);
+	    	} else {
+				WindowMinimizeEvent unminimizeEvent(false);
+	    		eventCallback(unminimizeEvent);
+	    	}
+	    });
+
+		glfwSetWindowMaximizeCallback(m_window, [](GLFWwindow* window, int maximized) {
+			auto&[eventCallback] = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+
+			if (maximized) {
+				WindowMaximizeEvent maximizedEvent(true);
+				eventCallback(maximizedEvent);
+			} else {
+				WindowMaximizeEvent unmaximizedEvent(false);
+				eventCallback(unmaximizedEvent);
+			}
+		});
+
+		return true;
 	}
 
     bool Window::initializeImGui()
@@ -100,8 +154,12 @@ namespace DG {
         return glfwWindowShouldClose(m_window);
     }
 
-    void Window::PollAndSwap() {
-        glfwSwapBuffers(m_window);
+    void Window::PollEvents() {
         glfwPollEvents();
     }
+
+    void Window::SwapBuffers() {
+        m_context->SwapBuffers();
+    }
+
 }

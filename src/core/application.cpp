@@ -3,6 +3,10 @@
 #include "renderer/renderer.h"
 #include "core/time.h"
 
+#include "renderer/graphics_api.h"
+
+#include <print>
+
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
 #endif
@@ -12,11 +16,17 @@ namespace DG {
 	Application::Application(const ApplicationSettings& settings)
 		: m_running(false), m_applicationSettings(settings), m_window(nullptr)
 	{
+		s_instance = this;
+
 		m_window = new DG::Window(
 			m_applicationSettings.windowWidth, 
 			m_applicationSettings.windowHeight, 
 			m_applicationSettings.windowTitle
 		);
+
+		m_window->SetEventCallback([&](IEvent& event) {
+			OnEvent(event);
+		});
 	}
 
 	void Application::Run() {
@@ -50,12 +60,29 @@ namespace DG {
 		DG::Renderer2D::EndImGui();
 	}
 
+	void Application::OnEvent(IEvent& event) {
+		EventDispatcher dispatcher(event);
+
+		dispatcher.Dispatch<WindowResizeEvent>([](WindowResizeEvent& event) {
+			//TODO: Create 'RenderCommand' structure. so we can call 'RenderCommand::SetViewPort(x, y, width, height)' etc. Same for commands in our renderer
+			glViewport(0, 0, event.GetWidth(), event.GetHeight());
+			return false;
+		});
+
+		for (auto& l : m_layerStack) {
+			l->OnEvent(event);
+			if (event.Handled) break;
+		}
+
+	}
+
 	void Application::Tick() {
 		Time::Update();
 
+		m_window->PollEvents();
 		Update(Time::GetDeltaTime());
+		m_window->SwapBuffers();
 
-		m_window->PollAndSwap();
 		if (m_window->ShouldClose()) {
 			m_running = false;
 		}

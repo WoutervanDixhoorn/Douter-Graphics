@@ -21,6 +21,7 @@ namespace DG {
 		[[nodiscard]] float GetViewHeight() const;
 		[[nodiscard]] float GetViewWidth() const;
 		[[nodiscard]] float GetZoomLevel() const;
+		[[nodiscard]] glm::vec3 GetPosition() const;
 
 	private:
 		void recalculateViewMatrix();
@@ -30,6 +31,9 @@ namespace DG {
 		float m_viewHeight = 0, m_viewWidth = 0;
 		float m_minx = 0, m_miny = 0, m_maxx = 0, m_maxy = 0;
 		float m_zoomLevel = 0;
+
+		glm::vec3 m_position = glm::vec3(0.0f);
+
 		glm::mat4 m_cameraMatrix{};
 		glm::mat4 m_projectionMatrix{};
 		glm::mat4 m_viewMatrix{};

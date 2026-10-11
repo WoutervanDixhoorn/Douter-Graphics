@@ -9,6 +9,7 @@ namespace DG {
 		virtual void OnAttach() = 0;
 		virtual void OnDettach() = 0;
 		virtual void OnUpdate(float deltaTime) = 0;
+		virtual void OnEvent(IEvent& event) = 0;
 		virtual void OnGuiDraw() = 0;
 	};
 
